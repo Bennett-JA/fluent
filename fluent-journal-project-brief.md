@@ -25,9 +25,12 @@ Add a `/fluent-journal` skill to my own fork of the Fluent plugin (`m98/fluent`)
 ## Decision: rewrite level (decided 2026-10-27)
 Stored as `preferences.journal_rewrite_level` in the learner profile. When it isn't set, the skill uses `target_level` (B2). `/fluent-journal level B1` changes it. `fluent-setup` stays untouched, so it can't conflict with upstream.
 
+## Decision: how Claude Code loads my fork (decided 2026-10-30)
+`main` stays an untouched copy of `m98/fluent`. Claude Code loads the `fluent-journal` branch instead: `claude plugin marketplace add 'Bennett-JA/fluent#fluent-journal'`. The marketplace keeps the name `m98` (it comes from `marketplace.json`, and renaming it would conflict with every upstream version bump), so the plugin is still `fluent@m98`. "m98" is only a local label. It points at my fork. Auto-update is off, so after pushing: `claude plugin marketplace update m98`, then restart Claude Code. If updates don't seem to apply, check whether the unchanged `0.3.0` version number is the cause.
+
 ## Environment facts
 - GitHub account: **Bennett-JA** (`gh` CLI already logged in). Git name and email are already configured.
-- Current plugin install: `fluent@m98` v0.3.0 from the marketplace, in `~/.claude/plugins/cache/m98/fluent/0.3.0` (this gets overwritten on update, so don't edit it).
+- Plugin install: `fluent@m98` v0.3.0, loaded from my fork's `fluent-journal` branch (since 2026-10-30), in `~/.claude/plugins/cache/m98/fluent/0.3.0` (this gets overwritten on update, so don't edit it).
 - My learning data: `~/.claude/fluent-data/` (separate from the plugin, safe).
 - Clone location: `~/github.com/fluent` (alongside my other repos)
 
@@ -39,8 +42,8 @@ Stored as `preferences.journal_rewrite_level` in the learner profile. When it is
 5. ✅ **Move this brief** into the repo
 6. ✅ **Build** `.claude/skills/fluent-journal/SKILL.md` (resolve the open decision first)
 7. ✅ **Test** with a real journal entry
-8. ⬜ **Commit and push** to my fork
-9. ⬜ **Switch Claude Code** to load Fluent from my fork instead of `m98`
+8. ✅ **Commit and push** to my fork
+9. ✅ **Switch Claude Code** to load Fluent from my fork instead of `m98` (still to confirm: `/fluent-journal` works when Claude Code starts outside the clone)
 10. ⬜ **Practice pulling an upstream update**
 
 ## Housekeeping
